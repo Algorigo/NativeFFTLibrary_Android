@@ -1,6 +1,88 @@
-plugins {
-    id 'com.android.library'
-    id 'kotlin-android'
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+
+def versionStr = '0.0.1'
+
+def getCurrentGitBranch() {
+    def gitBranch = "Unknown branch"
+    try {
+        def workingDir = new File("${project.projectDir}")
+        def result = 'git rev-parse --abbrev-ref HEAD'.execute(null, workingDir)
+        result.waitFor()
+        if (result.exitValue() == 0) {
+            gitBranch = result.text.trim()
+        }
+    } catch (e) {
+    }
+    return gitBranch
+}
+
+def getUserName() {
+    return System.properties['user.name']
+}
+
+buildscript {
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath 'com.bmuschko:gradle-nexus-plugin:2.3.1'
+    }
+}
+
+apply plugin: 'com.bmuschko.nexus'
+
+group = "com.algorigo.library"
+archivesBaseName = "nativefft"
+if (getCurrentGitBranch().contains('master')) {
+    version = versionStr
+} else {
+    version = "${versionStr}-${getUserName()}-SNAPSHOT"
+}
+
+modifyPom {
+    project {
+        name 'NativeFFTLibrary'
+        description 'Ble Library for Android using ReactiveX'
+        url 'https://github.com/Algorigo/NativeFFTLibrary_Android'
+        inceptionYear '2018'
+
+        scm {
+            url 'https://github.com/Algorigo/AlgorigoBleLibrary'
+            connection 'scm:https://github.com/Algorigo/NativeFFTLibrary_Android.git'
+            developerConnection 'scm:git:https://github.com/Algorigo/NativeFFTLibrary_Android.git'
+        }
+
+        licenses {
+            license {
+                name 'The Apache Software License, Version 2.0'
+                url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                distribution 'repo'
+            }
+        }
+
+        developers {
+            developer {
+                id 'rouddy'
+                name 'Rouddy'
+                email 'rouddy@naver.com'
+            }
+        }
+    }
+}
+
+extraArchive {
+    sources = true
+    tests = true
+    javadoc = true
+}
+
+nexus {
+    sign = true
+    repositoryUrl = NEXUS_REPOSITORY_URL
+    snapshotRepositoryUrl = NEXUS_SNAPSHOT_REPOSITORY_URL
 }
 
 android {
@@ -10,7 +92,7 @@ android {
         minSdk 21
         targetSdk 30
         versionCode 1
-        versionName "1.0"
+        versionName versionStr
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
