@@ -15,6 +15,13 @@ class NativeFFT {
         }
 
         @JvmStatic
+        fun fftFreq(dataLength: Int, dataSampleDistance: Double): DoubleArray {
+            return DoubleArray(dataLength) {
+                it / dataSampleDistance / dataLength
+            }
+        }
+
+        @JvmStatic
         fun fftC2c(arrayCount: Int, values: List<DoubleArray>): List<Array<Complex>> {
             return fftC2c(arrayCount, values, values.size)
         }

@@ -25,11 +25,14 @@ class MainActivity : AppCompatActivity() {
             doubleArrayOf(0.11, 0.03),
         )
         val resultC2c = NativeFFT.fftC2c(2, data, 20)
-        Log.e(LOG_TAG, "result:${resultC2c.toTypedArray().contentDeepToString()}")
+        Log.e(LOG_TAG, "resultC2c:${resultC2c.toTypedArray().contentDeepToString()}")
         val resultAbs = NativeFFT.fftC2cAbs(2, data, 20)
-        Log.e(LOG_TAG, "result:${resultAbs.toTypedArray().contentDeepToString()}")
+        Log.e(LOG_TAG, "resultAbs:${resultAbs.toTypedArray().contentDeepToString()}")
         val resultAbsSum = NativeFFT.fftC2cAbsSum(2, data, 20)
-        Log.e(LOG_TAG, "result:${resultAbsSum.toTypedArray().contentToString()}")
+        Log.e(LOG_TAG, "resultAbsSum:${resultAbsSum.toTypedArray().contentToString()}")
+
+        val frequencies = NativeFFT.fftFreq(30, 1.0)
+        Log.e(LOG_TAG, "frequencies:${frequencies.contentToString()}")
     }
 
     companion object {
