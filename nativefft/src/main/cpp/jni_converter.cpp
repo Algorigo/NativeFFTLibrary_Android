@@ -5,27 +5,28 @@
 #include "jni_converter.h"
 #include "android_log.h"
 
-jint listToDataArray(JNIEnv *env, jint arrayCount, jobject values, complex<double> **data_in, complex<double> **data_out) {
+jint listToDataArray(JNIEnv *env, jint arrayCount, jobject values, complex<double> **data_in, complex<double> **data_out, jint n) {
     jclass jclassList = env->GetObjectClass(values);
     jmethodID jmethodIdSize = env->GetMethodID(jclassList, "size", "()I");
     jmethodID jmethodIdGet = env->GetMethodID(jclassList, "get", "(I)Ljava/lang/Object;");
     auto size = env->CallIntMethod(values, jmethodIdSize);
-    auto dataSize = size * arrayCount;
+    auto dataSize = n * arrayCount;
     *data_in = new complex<double>[dataSize];
     *data_out = new complex<double>[dataSize];
+    fill_n(*data_in, dataSize, complex<double>(0.));
     for (auto index=0; index<size; index++) {
         jdoubleArray jdoubles = (jdoubleArray)env->CallObjectMethod(values, jmethodIdGet, index);
         auto doubleArraySize = env->GetArrayLength(jdoubles);
         auto doubles = env->GetDoubleArrayElements(jdoubles, NULL);
         for (auto arrayIdx=0; arrayIdx<doubleArraySize; arrayIdx++) {
             auto doubleValue = doubles[arrayIdx];
-            (*data_in)[index+arrayIdx*size] = complex<double>(doubleValue);
+            (*data_in)[index+arrayIdx*n] = complex<double>(doubleValue);
         }
         env->ReleaseDoubleArrayElements(jdoubles, doubles, JNI_ABORT);
         env->DeleteLocalRef(jdoubles);
     }
     env->DeleteLocalRef(jclassList);
-    return size;
+    return n;
 }
 
 jobject vectorToComplexArrayList(JNIEnv *env, jint arrayCount, jint size, const complex<double> *data_out) {

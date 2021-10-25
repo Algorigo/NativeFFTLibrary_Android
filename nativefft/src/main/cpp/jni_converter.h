@@ -14,7 +14,7 @@ using std::complex;
 extern "C" {
 #endif
 
-jint listToDataArray(JNIEnv *env, jint arrayCount, jobject values, complex<double> **data_in, complex<double> **data_out);
+jint listToDataArray(JNIEnv *env, jint arrayCount, jobject values, complex<double> **data_in, complex<double> **data_out, jint n);
 jobject vectorToAbsList(JNIEnv *env, jint arrayCount, jint size, const complex<double> *data_out);
 jobject vectorToComplexArrayList(JNIEnv *env, jint arrayCount, jint size, const complex<double> *data_out);
 jobject vectorToAbsSumList(JNIEnv *env, jint arrayCount, jint size, const complex<double> *data_out);

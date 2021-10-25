@@ -30,13 +30,14 @@ Java_com_algorigo_nativefft_NativeFFT_fftC2c(
         JNIEnv* env,
         jclass /* class */,
         jint arrayCount,
-        jobject values) {
+        jobject values,
+        jint n) {
 
     auto durationMillis = getCurrentMillis();
 
     complex<double> *data_in;
     complex<double> *data_out;
-    jint size = listToDataArray(env, arrayCount, values, &data_in, &data_out);
+    jint size = listToDataArray(env, arrayCount, values, &data_in, &data_out, n);
 
     shape_t shape_in(2);
     shape_in[0] = size;
@@ -72,13 +73,14 @@ Java_com_algorigo_nativefft_NativeFFT_fftC2cAbs(
         JNIEnv* env,
         jclass /* class */,
         jint arrayCount,
-        jobject values) {
+        jobject values,
+        jint n) {
 
     auto durationMillis = getCurrentMillis();
 
     complex<double> *data_in;
     complex<double> *data_out;
-    jint size = listToDataArray(env, arrayCount, values, &data_in, &data_out);
+    jint size = listToDataArray(env, arrayCount, values, &data_in, &data_out, n);
 
     shape_t shape_in(2);
     shape_in[0] = size;
@@ -114,13 +116,14 @@ Java_com_algorigo_nativefft_NativeFFT_fftC2cAbsSum(
         JNIEnv* env,
         jclass /* class */,
         jint arrayCount,
-        jobject values) {
+        jobject values,
+        jint n) {
 
     auto durationMillis = getCurrentMillis();
 
     complex<double> *data_in;
     complex<double> *data_out;
-    jint size = listToDataArray(env, arrayCount, values, &data_in, &data_out);
+    jint size = listToDataArray(env, arrayCount, values, &data_in, &data_out, n);
 
     shape_t shape_in(2);
     shape_in[0] = size;
