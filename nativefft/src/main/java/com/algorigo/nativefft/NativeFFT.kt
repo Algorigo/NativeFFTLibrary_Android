@@ -15,12 +15,27 @@ class NativeFFT {
         }
 
         @JvmStatic
-        external fun fftC2c(arrayCount: Int, values: List<DoubleArray>): List<Array<Complex>>
+        fun fftC2c(arrayCount: Int, values: List<DoubleArray>): List<Array<Complex>> {
+            return fftC2c(arrayCount, values, values.size)
+        }
 
         @JvmStatic
-        external fun fftC2cAbs(arrayCount: Int, values: List<DoubleArray>): List<DoubleArray>
+        fun fftC2cAbs(arrayCount: Int, values: List<DoubleArray>): List<DoubleArray> {
+            return fftC2cAbs(arrayCount, values, values.size)
+        }
 
         @JvmStatic
-        external fun fftC2cAbsSum(arrayCount: Int, values: List<DoubleArray>): List<Double>
+        fun fftC2cAbsSum(arrayCount: Int, values: List<DoubleArray>): List<Double> {
+            return fftC2cAbsSum(arrayCount, values, values.size)
+        }
+
+        @JvmStatic
+        external fun fftC2c(arrayCount: Int, values: List<DoubleArray>, n: Int): List<Array<Complex>>
+
+        @JvmStatic
+        external fun fftC2cAbs(arrayCount: Int, values: List<DoubleArray>, n: Int): List<DoubleArray>
+
+        @JvmStatic
+        external fun fftC2cAbsSum(arrayCount: Int, values: List<DoubleArray>, n: Int): List<Double>
     }
 }

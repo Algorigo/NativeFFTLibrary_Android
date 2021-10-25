@@ -24,11 +24,11 @@ class MainActivity : AppCompatActivity() {
             doubleArrayOf(0.91, 0.29),
             doubleArrayOf(0.11, 0.03),
         )
-        val resultC2c = NativeFFT.fftC2c(2, data)
+        val resultC2c = NativeFFT.fftC2c(2, data, 20)
         Log.e(LOG_TAG, "result:${resultC2c.toTypedArray().contentDeepToString()}")
-        val resultAbs = NativeFFT.fftC2cAbs(2, data)
+        val resultAbs = NativeFFT.fftC2cAbs(2, data, 20)
         Log.e(LOG_TAG, "result:${resultAbs.toTypedArray().contentDeepToString()}")
-        val resultAbsSum = NativeFFT.fftC2cAbsSum(2, data)
+        val resultAbsSum = NativeFFT.fftC2cAbsSum(2, data, 20)
         Log.e(LOG_TAG, "result:${resultAbsSum.toTypedArray().contentToString()}")
     }
 
