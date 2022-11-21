@@ -1,7 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
-def versionStr = '1.0.0'
+def versionStr = '1.0.1'
 
 def getCurrentGitBranch() {
     def gitBranch = "Unknown branch"
@@ -21,21 +21,21 @@ def getUserName() {
     return System.properties['user.name']
 }
 
+apply plugin: 'maven-publish'
+apply plugin: 'signing'
+
+group = "com.algorigo.library"
+archivesBaseName = "nativefft"
 if (getCurrentGitBranch().contains('master')) {
     version = versionStr
 } else {
     version = "${versionStr}-${getUserName()}-SNAPSHOT"
 }
 
-apply plugin: 'maven-publish'
-
 publishing {
     publications {
-        maven(MavenPublication) {
-            groupId = "com.algorigo.library"
-            artifactId = "nativefft"
-            version = "$version"
-
+        mavenJava(MavenPublication) {
+            artifactId = archivesBaseName
             pom {
                 name = 'Fft Library'
                 description = 'Fft Library for Android using Native pocketfft-cpp[https://gitlab.mpcdf.mpg.de/mtr/pocketfft]'
@@ -74,6 +74,10 @@ publishing {
             }
         }
     }
+}
+
+signing {
+    sign publishing.publications.mavenJava
 }
 
 android {
