@@ -21,68 +21,59 @@ def getUserName() {
     return System.properties['user.name']
 }
 
-buildscript {
-    repositories {
-        maven {
-            url "https://plugins.gradle.org/m2/"
-        }
-    }
-    dependencies {
-        classpath 'com.bmuschko:gradle-nexus-plugin:2.3.1'
-    }
-}
-
-apply plugin: 'com.bmuschko.nexus'
-
-group = "com.algorigo.library"
-archivesBaseName = "nativefft"
 if (getCurrentGitBranch().contains('master')) {
     version = versionStr
 } else {
     version = "${versionStr}-${getUserName()}-SNAPSHOT"
 }
 
-modifyPom {
-    project {
-        name 'NativeFFTLibrary'
-        description 'Ble Library for Android using ReactiveX'
-        url 'https://github.com/Algorigo/NativeFFTLibrary_Android'
-        inceptionYear '2018'
+apply plugin: 'maven-publish'
 
-        scm {
-            url 'https://github.com/Algorigo/AlgorigoBleLibrary'
-            connection 'scm:https://github.com/Algorigo/NativeFFTLibrary_Android.git'
-            developerConnection 'scm:git:https://github.com/Algorigo/NativeFFTLibrary_Android.git'
-        }
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId = "com.algorigo.library"
+            artifactId = "nativefft"
+            version = "$version"
 
-        licenses {
-            license {
-                name 'The Apache Software License, Version 2.0'
-                url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                distribution 'repo'
-            }
-        }
+            pom {
+                name = 'Fft Library'
+                description = 'Fft Library for Android using Native pocketfft-cpp[https://gitlab.mpcdf.mpg.de/mtr/pocketfft]'
+                url = 'https://github.com/Algorigo/NativeFFTLibrary_Android'
+                artifact("$buildDir/outputs/aar/nativefft-release.aar")
 
-        developers {
-            developer {
-                id 'rouddy'
-                name 'Rouddy'
-                email 'rouddy@naver.com'
+                licenses {
+                    license {
+                        name = 'The Apache Software License, Version 2.0'
+                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id = 'rouddy'
+                        name = 'Rouddy'
+                        email = 'rouddy@naver.com'
+                    }
+                }
+
+                scm {
+                    connection = 'scm:https://github.com/Algorigo/NativeFFTLibrary_Android.git'
+                    developerConnection = 'scm:git:https://github.com/Algorigo/NativeFFTLibrary_Android.git'
+                    url = 'https://github.com/Algorigo/NativeFFTLibrary_Android'
+                }
             }
         }
     }
-}
-
-extraArchive {
-    sources = true
-    tests = true
-    javadoc = true
-}
-
-nexus {
-    sign = true
-    repositoryUrl = NEXUS_REPOSITORY_URL
-    snapshotRepositoryUrl = NEXUS_SNAPSHOT_REPOSITORY_URL
+    repositories {
+        maven {
+            url = version.endsWith('SNAPSHOT') ? NEXUS_SNAPSHOT_REPOSITORY_URL : NEXUS_REPOSITORY_URL
+            credentials {
+                username = findProperty('nexusUsername')
+                password = findProperty('nexusPassword')
+            }
+        }
+    }
 }
 
 android {
@@ -116,11 +107,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
     }
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = '11'
     }
 }
 
